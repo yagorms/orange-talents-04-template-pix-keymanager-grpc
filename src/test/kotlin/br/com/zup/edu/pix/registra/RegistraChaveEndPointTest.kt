@@ -134,12 +134,12 @@ internal class RegistraChaveEndPointTest(
             assertEquals(Status.INVALID_ARGUMENT.code,status.code)
             assertEquals("Dados inválidos", status.description)
 //********** Essa validação está voltando somente dados inválidos ***************
-//            assertThat(violations(), containsInAnyOrder(
-//                Pair("clienteId", "must not be blank"),
+            assertThat(violations(), containsInAnyOrder(
+                Pair("clienteId", "must not be blank"),
 //                Pair("clienteId", "não é um formato válido de UUID"),
 //                Pair("tipoDeConta", "must not be null"),
 //                Pair("tipo", "must not be null"),
-//            ))
+            ))
         }
 
     }
