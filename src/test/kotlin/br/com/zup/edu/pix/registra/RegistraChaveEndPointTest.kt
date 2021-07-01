@@ -1,9 +1,6 @@
 package br.com.zup.edu.pix.registra
 
-import br.com.zup.edu.KeymanagerGrpcServiceGrpc
-import br.com.zup.edu.RegistraChavePixRequest
-import br.com.zup.edu.TipoDeChave
-import br.com.zup.edu.TipoDeConta
+import br.com.zup.edu.*
 import br.com.zup.edu.integration.itau.ContasDeClientesNoItauClient
 import br.com.zup.edu.integration.itau.DadosDaContaResponse
 import br.com.zup.edu.integration.itau.InstituicaoResponse
@@ -36,7 +33,7 @@ import javax.inject.Inject
 @MicronautTest(transactional = false)
 internal class RegistraChaveEndPointTest(
     val repository: ChavePixRepository,
-    val grpcClient: KeymanagerGrpcServiceGrpc.KeymanagerGrpcServiceBlockingStub
+    val grpcClient: KeymanagerRegistraGrpcServiceGrpc.KeymanagerRegistraGrpcServiceBlockingStub
 ){
 
     @Inject
@@ -133,13 +130,11 @@ internal class RegistraChaveEndPointTest(
         with(thrown) {
             assertEquals(Status.INVALID_ARGUMENT.code,status.code)
             assertEquals("Dados inválidos", status.description)
-//********** Essa validação está voltando somente dados inválidos ***************
-//            assertThat(violations(), containsInAnyOrder(
-//                Pair("clienteId", "must not be blank"),
-//                Pair("clienteId", "não é um formato válido de UUID"),
-//                Pair("tipoDeConta", "must not be null"),
-//                Pair("tipo", "must not be null"),
-//            ))
+            assertThat(violations(), containsInAnyOrder(
+                Pair("clienteId", "não deve estar em branco"),
+                Pair("tipoDeConta", "não deve ser nulo"),
+                Pair("tipo", "não deve ser nulo"),
+            ))
         }
 
     }
@@ -180,8 +175,8 @@ internal class RegistraChaveEndPointTest(
     @Factory
     class Clients {
         @Bean
-        fun blockingStub(@GrpcChannel(GrpcServerChannel.NAME) channel: ManagedChannel): KeymanagerGrpcServiceGrpc.KeymanagerGrpcServiceBlockingStub? {
-            return KeymanagerGrpcServiceGrpc.newBlockingStub(channel)
+        fun blockingStub(@GrpcChannel(GrpcServerChannel.NAME) channel: ManagedChannel): KeymanagerRegistraGrpcServiceGrpc.KeymanagerRegistraGrpcServiceBlockingStub? {
+            return KeymanagerRegistraGrpcServiceGrpc.newBlockingStub(channel)
         }
     }
 
